@@ -149,6 +149,7 @@ activemq-data/
 
 # Environments
 .env
+*.env
 .envrc
 .venv
 env/
@@ -216,3 +217,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Logs
+*.log
+
+# Local data volumes
+nextcloud_data/
+
+# Audit logs
+/var/log/detector/
+
+# Docker override files
+docker-compose.override.yml

@@ -142,6 +142,18 @@ class BaselineTracker:
               f"stddev={self.effective_stddev:.4f} source={source} "
               f"samples={len(counts)}")
 
+	# Write to audit log
+        audit_path = self.__dict__.get('audit_log_path', '/var/log/detector/audit.log')
+        try:
+            with open(audit_path, 'a') as f:
+                f.write(f"[{entry['timestamp']}] BASELINE_RECALC - | "
+                        f"condition=source:{source} | "
+                        f"rate={self.effective_mean:.2f} | "
+                        f"baseline={self.effective_mean:.2f} | "
+                        f"duration=samples:{len(counts)}\n")
+        except Exception:
+            pass
+
     def _mean(self, values):
         """Calculate arithmetic mean of a list of values."""
         if not values:

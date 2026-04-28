@@ -14,6 +14,12 @@ https://github.com/kloud-wiz/hng14-stage3-anomaly-detector
 
 ---
 
+## Architecture
+
+![Architecture Diagram](docs/architecture.png)
+
+---
+
 ## Language Choice
 Built in **Python** because:
 - Rich standard library (collections.deque, threading, statistics)

@@ -87,42 +87,82 @@ Auto-unban backoff schedule:
 
 ## Setup Instructions
 
-### 1. Prerequisites
+### 1. Provision a VPS
+- Minimum: 2 vCPU, 2GB RAM
+- Recommended: GCP `e2-medium`, Ubuntu 22.04 LTS x86/64
+- Reserve a **static external IP** — critical for grading stability
+- Open firewall ports: **80, 443, 8080, 8081**
+
+### 2. SSH into your VPS
 ```bash
-sudo apt update && sudo apt install -y docker.io docker-compose git
+ssh user@your-server-ip
+```
+
+### 3. Update the system
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+### 4. Install dependencies
+```bash
+sudo apt install -y docker.io docker-compose git python3 python3-pip iptables
 sudo usermod -aG docker $USER && newgrp docker
 ```
 
-### 2. Clone the repo
+### 5. Clone the repo
 ```bash
 git clone https://github.com/kloud-wiz/hng14-stage3-anomaly-detector.git
 cd hng14-stage3-anomaly-detector
 ```
 
-### 3. Configure
+### 6. Configure
 ```bash
 nano detector/config.yaml
-# Set your Slack webhook URL
+# Set your Slack webhook URL in slack_webhook_url field
 ```
 
-### 4. Start the stack
+### 7. Start the stack
 ```bash
 docker-compose up --build -d
 ```
 
-### 5. Set up dashboard domain (optional)
-```bash
-sudo apt install -y nginx certbot python3-certbot-nginx
-sudo nano /etc/nginx/sites-available/monitor
-# Proxy monitor.yourdomain.com → localhost:8080
-sudo certbot --nginx -d monitor.yourdomain.com
-```
-
-### 6. Verify
+### 8. Verify containers are running
 ```bash
 docker-compose ps
+```
+
+### 9. Test traffic logging
+```bash
 curl -H "X-Forwarded-For: 1.2.3.4" http://localhost:8081/
-docker exec detector cat /var/log/nginx/hng-access.log
+docker exec nginx cat /var/log/nginx/hng-access.log
+```
+
+### 10. Set up dashboard domain (optional but recommended)
+```bash
+# Install system Nginx and Certbot
+sudo apt install -y nginx certbot python3-certbot-nginx
+
+# Create server blocks for Nextcloud and dashboard
+sudo nano /etc/nginx/sites-available/monitor
+
+# Add DNS A record pointing your subdomain to your server IP
+# Then get SSL certificate
+sudo certbot --nginx -d monitor.yourdomain.com
+
+# Restart Nginx
+sudo systemctl restart nginx
+```
+
+### 11. Verify full pipeline
+```bash
+# Run a test flood
+for i in {1..300}; do curl -s -H "X-Forwarded-For: 1.2.3.4" http://localhost:8081/ > /dev/null; done
+
+# Check detector logs for ban
+docker-compose logs --tail=20 detector
+
+# Check iptables for ban rule
+docker exec detector iptables -L INPUT -n
 ```
 
 ---

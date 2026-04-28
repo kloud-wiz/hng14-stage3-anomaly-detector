@@ -10,7 +10,7 @@ A real-time DDoS and anomaly detection daemon built for HNG14 Stage 3. Monitors 
 https://github.com/kloud-wiz/hng14-stage3-anomaly-detector
 
 ## Blog Post
-<!-- Add Hashnode URL coming soon -->
+https://kloudwiz.hashnode.dev/how-i-built-a-real-time-ddos-detection-engine-from-scratch-hng14-stage-3
 
 ---
 

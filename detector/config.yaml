@@ -31,4 +31,4 @@ dashboard_host: 0.0.0.0
 dashboard_port: 8080
 
 # Slack webhook URL
-slack_webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+slack_webhook_url: "SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/REAL/WEBHOOK"

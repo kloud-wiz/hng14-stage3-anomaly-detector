@@ -17,7 +17,11 @@ from dashboard import Dashboard
 def load_config(path='/app/config.yaml'):
     """Load configuration from config.yaml."""
     with open(path, 'r') as f:
-        return yaml.safe_load(f)
+        config = yaml.safe_load(f)
+    # Override with environment variables if set
+    if os.environ.get('SLACK_WEBHOOK_URL'):
+        config['slack_webhook_url'] = os.environ.get('SLACK_WEBHOOK_URL')
+    return config
 
 
 def format_duration(seconds):

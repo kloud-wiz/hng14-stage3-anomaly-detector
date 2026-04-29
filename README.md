@@ -117,8 +117,13 @@ cd hng14-stage3-anomaly-detector
 
 ### 6. Configure
 ```bash
-nano detector/config.yaml
-# Set your Slack webhook URL in slack_webhook_url field
+# Create .env file with your Slack webhook URL
+nano .env
+# Add this line:
+# SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+
+# The webhook URL in config.yaml is a placeholder — 
+# the real URL is loaded from .env at runtime
 ```
 
 ### 7. Start the stack
